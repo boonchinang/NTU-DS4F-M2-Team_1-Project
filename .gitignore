@@ -1,0 +1,30 @@
+# Security & Environment
+.env
+.gcp/
+*.json
+sa_key.json
+
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+*.egg-info/
+
+# dbt & Meltano Build Artifacts
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+dbt_project/.meltano/
+dbt_project/ogs/
+
+# Dagster Storage
+dagster-orchestration/.dagster/
+dagster-orchestration/storage/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store

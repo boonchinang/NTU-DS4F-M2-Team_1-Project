@@ -1,0 +1,45 @@
+version: 1
+default_environment: dev
+
+environments:
+- name: dev
+
+plugins:
+  extractors:
+  - name: tap-bigquery
+    variant: anelendata
+    pip_url: tap-bigquery
+    config:
+      project_id: bigquery-public-data
+      dataset: london_bicycles
+      location: EU
+      start_datetime: '2023-01-15T20:00:00Z'
+      credentials_path: ${GOOGLE_APPLICATION_CREDENTIALS}
+      streams:
+      - name: cycle_hire
+        table: bigquery-public-data.london_bicycles.cycle_hire
+        datetime_key: start_date
+        columns:
+        - '*'
+      - name: cycle_stations
+        table: bigquery-public-data.london_bicycles.cycle_stations
+        datetime_key: install_date
+        columns:
+        - '*'
+  loaders:
+  - name: target-bigquery
+    variant: z3z1ma
+    pip_url: git+https://github.com/z3z1ma/target-bigquery.git setuptools<80
+    config:
+      project: ${GCP_PROJECT_ID}
+      project_id: ${GCP_PROJECT_ID}
+      dataset: london_bicycles_raw
+      dataset_id: london_bicycles_raw
+      location: EU
+      credentials_path: ${GOOGLE_APPLICATION_CREDENTIALS}
+      denormalized: true
+      flattening_enabled: true
+      flattening_max_depth: 1
+      method: batch_job
+
+python: python3.11

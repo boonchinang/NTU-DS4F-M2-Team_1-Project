@@ -1,0 +1,13 @@
+london_bicycles_profile:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: service-account
+      project: "{{ env_var('GCP_PROJECT_ID', '') }}"
+      dataset: london_bicycles
+      location: EU
+      keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS', '../.gcp/sa_key.json') }}"
+      maximum_bytes_billed: 10737418240 # 10 GB per query safety cap
+      threads: 4
+      timeout_seconds: 300

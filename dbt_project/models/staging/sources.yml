@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: london_bicycles_raw
+    database: "{{ env_var('GCP_PROJECT_ID', '<YOUR_GCP_PROJECT_ID>') }}"
+    schema: london_bicycles_raw
+    tables:
+      - name: cycle_hire
+      - name: cycle_stations

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-10-04T00:00:00.000Z" agent="Gemini Notebook" version="21.0.0" type="device">
+  <diagram id="london-bicycles-architecture" name="London Bicycles End-to-End Pipeline Architecture">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <mxCell id="title" value="London Bicycles End-to-End Pipeline Architecture (Meltano + GCP BigQuery + dbt Core/Snapshots + dbt-expectations + Dagster)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#1A252C;" vertex="1" parent="1">
+          <mxGeometry x="100" y="15" width="960" height="35" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box_source" value="1. RAW DATA SOURCE&#10;(GCP Public Data)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E8F0FE;strokeColor=#1A73E8;fontStyle=1;fontSize=11;startSize=25;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="70" width="180" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="src_hire" value="bigquery-public-data&#10;.london_bicycles&#10;── cycle_hire (~84M)&#10;── cycle_stations (~789)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFFFFF;strokeColor=#1A73E8;fontSize=9;align=center;" vertex="1" parent="box_source">
+          <mxGeometry x="15" y="45" width="150" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr1" value="Fast SQL Load /&#10;Meltano (.env SA Key)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#1A73E8;fontStyle=1;fontSize=9;" edge="1" parent="1" source="box_source" target="box_ingest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box_ingest" value="2. INGESTION &amp; STAGING&#10;(&lt;GCP project id&gt; EU)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEF7E0;strokeColor=#FBBC04;fontStyle=1;fontSize=11;startSize=25;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="240" y="70" width="200" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="mel_tap" value="Meltano Ingestion Engine&#10;tap-bigquery ➔ target-bigquery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FBBC04;fontSize=9;fontStyle=1;" vertex="1" parent="box_ingest">
+          <mxGeometry x="10" y="40" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="stg_models" value="dbt Staging Views&#10;stg_london_bicycles__hire&#10;stg_london_bicycles__stations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#FBBC04;fontSize=9;" vertex="1" parent="box_ingest">
+          <mxGeometry x="10" y="105" width="180" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dbt_snapshots" value="dbt Snapshots (SCD Type 2)&#10;snapshot_stations&#10;(Tracks Capacity/Name Changes)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=9;fontStyle=1;" vertex="1" parent="box_ingest">
+          <mxGeometry x="10" y="180" width="180" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr2" value="Star Schema Transformation" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#FBBC04;fontStyle=1;fontSize=9;" edge="1" parent="1" source="box_ingest" target="box_marts">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box_marts" value="3. WAREHOUSE MARTS&#10;(dbt Star Schema)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E6F4EA;strokeColor=#34A853;fontStyle=1;fontSize=11;startSize=25;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="70" width="210" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="dim_tables" value="Dimensions:&#10;dim_stations (SCD Type 1)&#10;dim_date / dim_time" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#34A853;fontSize=9;" vertex="1" parent="box_marts">
+          <mxGeometry x="10" y="40" width="190" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="fact_rentals" value="Fact Table: fact_rentals&#10;── Partition: DATE(start_date)&#10;── Cluster: start_station_key&#10;── Pre-computed Commute Flags" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CEEAD6;strokeColor=#34A853;fontStyle=1;fontSize=9;" vertex="1" parent="box_marts">
+          <mxGeometry x="10" y="110" width="190" height="135" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr3" value="Data Quality Testing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#34A853;fontStyle=1;fontSize=9;" edge="1" parent="1" source="box_marts" target="box_qa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box_qa" value="4. DATA QUALITY GATES" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#AB47BC;fontStyle=1;fontSize=11;startSize=25;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="70" width="200" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="dbt_tests" value="dbt test Assertions&#10;── unique &amp; not_null&#10;── relationships (FK Integrity)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#AB47BC;fontSize=9;" vertex="1" parent="box_qa">
+          <mxGeometry x="10" y="45" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ge_tests" value="dbt-expectations &amp; GE Suite&#10;── expect_column_quantile_values&#10;── expect_table_row_count" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#AB47BC;fontSize=9;fontStyle=1;" vertex="1" parent="box_qa">
+          <mxGeometry x="10" y="145" width="180" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr4" value="Validated Insights" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#AB47BC;fontStyle=1;fontSize=9;" edge="1" parent="1" source="box_qa" target="box_bi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box_bi" value="5. ANALYTICS &amp; DELIVERY" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FCE8E6;strokeColor=#EA4335;fontStyle=1;fontSize=11;startSize=25;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="940" y="70" width="200" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="bi_notebook" value="Jupyter Notebook (.ipynb)&#10;── Interactive Plotly &amp; Seaborn&#10;── All-Year Monthly Timeline&#10;── Customer Segmentation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EA4335;fontSize=9;" vertex="1" parent="box_bi">
+          <mxGeometry x="10" y="45" width="180" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="bi_slides" value="Executive Slide Deck&#10;── CEO &amp; CTO 3-Slide Briefing&#10;── PPTX &amp; PDF Formats" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EA4335;fontSize=9;" vertex="1" parent="box_bi">
+          <mxGeometry x="10" y="155" width="180" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="box_dagster" value="6. PIPELINE ORCHESTRATION: DAGSTER ENGINE&#10;Automated Daily Schedule @ 12:01 AM Singapore Time (1 0 * * * Asia/Singapore) | Manual 'Launch Run' Trigger Button" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#3F51B5;fontStyle=1;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="30" y="350" width="1110" height="60" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

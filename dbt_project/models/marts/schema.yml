@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: fact_rentals
+    description: "Core fact table containing London bicycle trip rentals"
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      - name: rental_id
+        tests:
+          - unique
+          - not_null
+      - name: start_station_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_stations')
+              field: station_key
+      - name: duration_seconds
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_quantile_values_to_be_between:
+              quantile: 0.5
+              min_value: 60
+              max_value: 86400
+
+  - name: dim_stations
+    description: "Dimension table containing London bicycle docking stations"
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+    columns:
+      - name: station_key
+        tests:
+          - unique
+          - not_null
+      - name: bike_capacity
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 200
