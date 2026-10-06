@@ -46,10 +46,25 @@ NTU-DS4F-M2-Team_1-Project/
 
 ---
 
+### 🚀 Environment and GCP Dataset Setup
+1. Navigate to the `environment/` directory and create the Conda virtual environment:
+   ```bash
+   cd environment
+   conda env create --file env.yml
+   conda activate ntu-ds4f-m2
+   cd ..
+   ```
+2. Connect to your GCP Project, Create a new dataset in BigQuery, set the Data set ID as `london_bicycles_raw` and choose location `EU`.
+---
+
 ### 🔒 Secure GCP Service Account Key Setup
 
+
+
 To connect to your GCP Project `<GCP project id>` safely without committing credentials to Git:
+
 1. Obtain your GCP Service Account JSON key file from GCP IAM Console with BigQuery Admin / Data Editor roles.
+
 2. Save the key inside the hidden directory `.gcp/sa_key.json`:
 ```bash
 mkdir -p .gcp

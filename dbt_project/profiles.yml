@@ -8,6 +8,6 @@ london_bicycles_profile:
       dataset: london_bicycles
       location: EU
       keyfile: "{{ env_var('GOOGLE_APPLICATION_CREDENTIALS', '../.gcp/sa_key.json') }}"
-      maximum_bytes_billed: 10737418240 # 10 GB per query safety cap
+      maximum_bytes_billed: 10737418240
       threads: 4
       timeout_seconds: 300
