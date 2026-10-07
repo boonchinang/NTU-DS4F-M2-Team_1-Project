@@ -50,7 +50,7 @@ NTU-DS4F-M2-Team_1-Project/
 1. Navigate to the `environment/` directory and create the Conda virtual environment:
    ```bash
    cd environment
-   conda env create --file env.yml
+   conda create --file env.yml
    conda activate ntu-ds4f-m2
    cd ..
    ```
