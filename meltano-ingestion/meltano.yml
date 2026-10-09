@@ -43,3 +43,4 @@ plugins:
       method: batch_job
 
 python: python3.11
+project_id: 01a119e3-4f65-761e-a866-16a02f4ee609
