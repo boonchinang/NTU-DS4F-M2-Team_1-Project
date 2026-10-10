@@ -77,7 +77,7 @@ with tab1:
             "83,434,866", "2015-01-04", "2023-01-17", "39,705", "561,504", "❌ Failed (Missing Dim Keys)"
         ],
         'dbt Star Schema (fact_rentals)': [
-            "82,833,597", "2015-01-04", "2023-01-17", "0", "0", "✅ 100% Passed (dbt test & dbt-expectations)"
+            "83,145,944", "2015-01-04", "2023-01-15", "0", "0", "✅ 100% Passed (dbt test & dbt-expectations)"
         ]
     })
     st.dataframe(audit_df, use_container_width=True)
