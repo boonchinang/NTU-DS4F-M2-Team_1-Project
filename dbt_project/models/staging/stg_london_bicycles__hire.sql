@@ -13,6 +13,12 @@ WITH raw_hire AS (
     WHERE rental_id IS NOT NULL
       AND duration > 0
       AND start_station_id IS NOT NULL
+    -- Remove duplicates created when Meltano appends rows that already exist.
+    -- Keeps the Meltano-loaded copy (populated _sdc_extracted_at) over the original.
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY rental_id 
+        ORDER BY _sdc_extracted_at DESC NULLS LAST
+    ) = 1
 )
 
 SELECT * FROM raw_hire
