@@ -19,10 +19,15 @@ dbt_project/dbt_packages/
 dbt_project/logs/
 dbt_project/.meltano/
 dbt_project/ogs/
+dbt_project/.user.yml
+dbt_project/package-lock.yml
+meltano-ingestion/.meltano/
+meltano-ingestion/plugins/
 
 # Dagster Storage
 dagster-orchestration/.dagster/
 dagster-orchestration/storage/
+dagster-orchestration/.tmp_dagster_home_*
 
 # IDE & OS
 .vscode/
