@@ -1,4 +1,4 @@
-# Section 7 Technical Report: London Bicycles End-to-End Pipeline & Schema Justification
+# Technical Report: London Bicycles End-to-End Pipeline & Schema Justification
 
 > **Course**: NTU SCTP Data Engineering Module 2 Project  
 > **Repository**: `NTU-DS4F-M2-Team_1-Project`  
@@ -19,7 +19,7 @@ The system provides interactive analytics via Jupyter Notebook (`NTU-DS4F-M2-T1-
 
 | Tool / Technology | Selected Option | Considered Alternatives | Strategic Justification |
 | :--- | :--- | :--- | :--- |
-| **Initial Fast-Load** | **GCP BigQuery SQL (`CREATE TABLE`)** | Direct streaming, full tap download | **Instant Raw Population**: As `bigquery-public-data` contains ~84M static historical records (~25M hire logs), performing an in-warehouse BigQuery SQL copy populates raw tables in seconds with zero network transfer overhead. |
+| **Initial Fast-Load** | **GCP BigQuery SQL (`CREATE TABLE`)** | Direct streaming, full tap download | **Instant Raw Population**: As `bigquery-public-data` contains ~84M static historical records, performing an in-warehouse BigQuery SQL copy populates raw tables in seconds with zero network transfer overhead. |
 | **Incremental Ingestion** | **Meltano** | Airbyte, Fivetran, Custom Scripts | **Open-Source & Code-First**: Meltano uses Singer taps/targets (`tap-bigquery`, `target-bigquery`) for incremental updates. Version-controlled in Git and uses hidden `.env` files for secure service account management. |
 | **Data Warehouse** | **Google BigQuery (`EU`)** | Snowflake, PostgreSQL, AWS Redshift | **Zero-Server Maintenance**: Direct integration with `bigquery-public-data`. Partitioning by `start_date` and clustering by `start_station_key` eliminate infrastructure management while keeping scan costs near zero. |
 | **Transformation & Snapshots** | **dbt Core + dbt Snapshots** | Apache Spark, Stored Procedures | **Modular SQL & Historical Change Tracking**: dbt manages DAG dependency lineage and provides built-in dbt Snapshots (`snapshot_stations`) for SCD Type 2 historical change tracking (e.g. station capacity updates). |
