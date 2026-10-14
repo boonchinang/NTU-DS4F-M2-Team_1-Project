@@ -26,6 +26,14 @@ plugins:
         datetime_key: install_date
         columns:
         - '*'
+    schema:
+      cycle_hire:
+        end_station_logical_terminal:
+          type: ['null', integer]
+        start_station_logical_terminal:
+          type: ['null', integer]
+        end_station_priority_id:
+          type: ['null', integer]
   loaders:
   - name: target-bigquery
     variant: z3z1ma
@@ -43,3 +51,4 @@ plugins:
       method: batch_job
 
 python: python3.11
+

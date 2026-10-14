@@ -28,12 +28,12 @@ def main():
         engine = create_engine(connection_url)
         query = text(f"""
             SELECT 
-                (SELECT COUNT(*) FROM ) as total_rentals,
-                (SELECT COUNT(*) FROM ) as total_stations,
-                (SELECT COUNT(*) FROM  
-                 WHERE start_station_key NOT IN (SELECT station_key FROM )) as orphan_rentals,
-                (SELECT AVG(duration_seconds) FROM ) as avg_duration,
-                (SELECT COUNT(*) FROM  WHERE bike_capacity < 0) as invalid_docks
+                (SELECT COUNT(*) FROM `{project_id}.{dataset_id}.fact_rentals`) as total_rentals,
+                (SELECT COUNT(*) FROM `{project_id}.{dataset_id}.dim_stations`) as total_stations,
+                (SELECT COUNT(*) FROM `{project_id}.{dataset_id}.fact_rentals` 
+                 WHERE start_station_key NOT IN (SELECT station_key FROM `{project_id}.{dataset_id}.dim_stations`)) as orphan_rentals,
+                (SELECT AVG(duration_seconds) FROM `{project_id}.{dataset_id}.fact_rentals`) as avg_duration,
+                (SELECT COUNT(*) FROM `{project_id}.{dataset_id}.dim_stations` WHERE bike_capacity < 0) as invalid_docks
         """)
         
         with engine.connect() as conn:
