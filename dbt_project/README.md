@@ -19,14 +19,14 @@ This directory transforms raw BigQuery data into an optimized **Star Schema** (`
    dbt deps
    ```
 
-4. Execute SCD Type 2 Snapshots:
-   ```bash
-   dbt snapshot
-   ```
-
-5. Run Star Schema models:
+4. Run Star Schema models:
    ```bash
    dbt run
+   ```
+
+5. Execute SCD Type 2 Snapshots:  
+   ```bash
+   dbt snapshot
    ```
 
 6. Run dbt-expectations quality assertions:
