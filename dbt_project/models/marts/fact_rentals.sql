@@ -21,6 +21,7 @@ SELECT
     CAST(FORMAT_DATE('%Y%m%d', DATE(h.start_date)) AS INT64) AS start_date_key,
     EXTRACT(HOUR FROM h.start_date) AS start_time_key,
     DATE(h.start_date) AS start_date,
+    DATE(h.end_date) AS end_date,
     h.bike_id,
     h.duration_seconds,
     ROUND(h.duration_seconds / 60.0, 2) AS duration_minutes,
